@@ -1,0 +1,22 @@
+server:
+  port: 8888
+spring:
+  application:
+    name: it-gateway
+  cloud:
+    nacos:
+      discovery:
+        server-addr: localhost:8848
+    gateway:
+      discovery:
+        locator:
+          # 找到其他微服务的配置实现
+          enabled: true
+management:
+  endpoints:
+    web:
+      exposure:
+        include: '*'
+  endpoint:
+    health:
+      show-details: always
