@@ -1,6 +1,10 @@
 package com.it.config;
 
 import com.it.filter.TokenFilter;
+import com.it.security.JwtAccessDeniedHandler;
+import com.it.security.JwtAuthenticationEntryPoint;
+import com.it.security.LoginFailureHandler;
+import com.it.security.LoginSuccessHandler;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
@@ -12,11 +16,7 @@ import org.springframework.security.config.annotation.web.configuration.WebSecur
 import org.springframework.security.config.http.SessionCreationPolicy;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
-import org.springframework.security.web.AuthenticationEntryPoint;
-import org.springframework.security.web.authentication.AuthenticationFailureHandler;
-import org.springframework.security.web.authentication.AuthenticationSuccessHandler;
 import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
-import org.springframework.security.web.authentication.logout.LogoutSuccessHandler;
 
 /**
  * @author HSL
@@ -37,14 +37,16 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
 
     @Autowired
     private UserDetailsService userDetailsService;
-    // @Autowired
-    // private AuthenticationSuccessHandler authenticationSuccessHandler;
-    // @Autowired
-    // private AuthenticationFailureHandler authenticationFailureHandler;
+    @Autowired
+    private LoginSuccessHandler loginSuccessHandler;
+    @Autowired
+    private LoginFailureHandler loginFailureHandler;
     // @Autowired
     // private LogoutSuccessHandler logoutSuccessHandler;
-    // @Autowired
-    // private AuthenticationEntryPoint authenticationEntryPoint;
+    @Autowired
+    private JwtAuthenticationEntryPoint jwtAuthenticationEntryPoint;
+    @Autowired
+    private JwtAccessDeniedHandler jwtAccessDeniedHandler;
     @Autowired
     private TokenFilter tokenFilter;
 
@@ -65,10 +67,15 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
         // 基于token，所以不需要session
         http.sessionManagement().sessionCreationPolicy(SessionCreationPolicy.STATELESS);
         // 自定义登录页面
+        http.formLogin().successHandler(loginSuccessHandler)
+                .failureHandler(loginFailureHandler);// Form表单的形式
         http.authorizeRequests()
                 .antMatchers(URL_WHITE).permitAll()
-                .anyRequest().authenticated();
-        http.formLogin();// Form表单的形式
+                .anyRequest().authenticated()
+                .and()
+                .exceptionHandling()
+                .authenticationEntryPoint(jwtAuthenticationEntryPoint)
+                .accessDeniedHandler(jwtAccessDeniedHandler);
         /*http.formLogin().loginProcessingUrl("/login")
                 .successHandler(authenticationSuccessHandler)
                 .failureHandler(authenticationFailureHandler).and()
@@ -77,6 +84,7 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
         // 解决不允许显示在iframe的问题
         http.headers().frameOptions().disable();
         http.headers().cacheControl();
+        // token过滤器要放在用户名密码处理器之前
         http.addFilterBefore(tokenFilter, UsernamePasswordAuthenticationFilter.class);
     }
 

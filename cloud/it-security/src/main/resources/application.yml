@@ -26,7 +26,7 @@ spring:
   jackson:
     date-format: yyyy-MM-dd HH:mm:ss
     time-zone: GMT+8
-    joda-date-time-format: yyyy-MM-dd HH:mm:ss
+  #    joda-date-time-format: yyyy-MM-dd HH:mm:ss
   servlet:
     multipart:
       max-file-size: 100MB
@@ -34,6 +34,11 @@ spring:
   mvc:
     servlet:
       load-on-startup: 1
+
+  security:
+    user:
+      name: admin
+      password: admin
 
 server:
   port: 8888
