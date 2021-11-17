@@ -1,5 +1,6 @@
 import axios from 'axios'
 import config from '../config/index'
+import store from '../store/index'
 
 const baseUrl = process.env.NODE_ENV === 'development' ? config.baseUrl.dev : config.baseUrl.pro
 
@@ -22,7 +23,10 @@ class HttpRequest {
   interceptors (instance) {
     instance.interceptors.request.use(function (config) {
       // 在发送请求之前做些什么
-      console.log('拦截处理请求')
+      //判断是否存在token，如果存在将每个页面header都添加token
+      if (store.user.state.token) {
+        config.headers.common['user-oss-token'] = store.user.state.token
+      }
       return config
     }, function (error) {
       // 对请求错误做些什么
@@ -30,8 +34,8 @@ class HttpRequest {
     })
 
     instance.interceptors.response.use(function (response) {
-      console.log('处理相应')
       // 对响应数据做点什么
+      // 如果返回登录过期，需要及时清空token等信息
       return response.data
     }, function (error) {
       console.log(error)

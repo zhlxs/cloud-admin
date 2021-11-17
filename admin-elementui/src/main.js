@@ -14,6 +14,7 @@ import '@/assets/scss/reset.scss' // 全局样式
 
 import VCharts from 'v-charts'
 // import Directives from 'vue-directives'
+import qs from 'qs'
 
 Vue.use(ElementUI)
 Vue.use(Router)
@@ -21,6 +22,7 @@ Vue.use(VCharts)
 // Vue.use(Directives)
 
 Vue.prototype.$http = http
+Vue.prototype.$qs = qs
 
 Vue.config.productionTip = false
 /**

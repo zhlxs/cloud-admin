@@ -2,13 +2,15 @@ import Vue from 'vue'
 import Vuex from 'vuex'
 import common from './modules/common'
 import tab from './modules/tab'
+import user from './modules/user'
 
 Vue.use(Vuex)
 
 const store = new Vuex.Store({
   modules: {
     common,
-    tab
+    tab,
+    user
   }
 })
 
