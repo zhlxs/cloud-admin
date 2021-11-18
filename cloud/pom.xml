@@ -54,6 +54,17 @@
                 <version>1.1.22</version>
             </dependency>
             <!--管理的nacos最新版本是0.9.0.RELEASE，已经不再维护了，用起来有版本问题-->
+            <!--swagger2 依赖-->
+            <dependency>
+                <groupId>io.springfox</groupId>
+                <artifactId>springfox-swagger-ui</artifactId>
+                <version>2.7.0</version>
+            </dependency>
+            <dependency>
+                <groupId>io.springfox</groupId>
+                <artifactId>springfox-swagger2</artifactId>
+                <version>2.7.0</version>
+            </dependency>
         </dependencies>
     </dependencyManagement>
 

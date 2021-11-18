@@ -113,14 +113,14 @@ public class MybatisInterceptor implements Interceptor
 		return invocation.proceed();
 	}
 
-	public static void main(String[] args) throws NoSuchMethodException, InvocationTargetException, IllegalAccessException
-	{
-		SysUserDO sysUserDO = new SysUserDO();
-		Method m = sysUserDO.getClass().getMethod("getId");
-		Object o = m.invoke(sysUserDO);
-		Method m1 = sysUserDO.getClass().getMethod("setId");
-		sysUserDO.getClass().getMethod("setId", new Class[] { Long.class }).invoke(sysUserDO, new Object[1]);
-		System.out.println(o);
-		System.out.println(sysUserDO.getId());
-	}
+//	public static void main(String[] args) throws NoSuchMethodException, InvocationTargetException, IllegalAccessException
+//	{
+//		SysUserDO sysUserDO = new SysUserDO();
+//		Method m = sysUserDO.getClass().getMethod("getId");
+//		Object o = m.invoke(sysUserDO);
+//		Method m1 = sysUserDO.getClass().getMethod("setId");
+//		sysUserDO.getClass().getMethod("setId", new Class[] { Long.class }).invoke(sysUserDO, new Object[1]);
+//		System.out.println(o);
+//		System.out.println(sysUserDO.getId());
+//	}
 }
