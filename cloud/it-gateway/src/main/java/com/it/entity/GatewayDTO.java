@@ -5,6 +5,7 @@ import io.swagger.annotations.ApiModel;
 import io.swagger.annotations.ApiModelProperty;
 import lombok.Data;
 
+import javax.validation.constraints.NotEmpty;
 import java.io.Serializable;
 
 /**
@@ -22,6 +23,7 @@ public class GatewayDTO implements Serializable {
     private Long id;
 
     @ApiModelProperty("路由id")
+    @NotEmpty(message = "服务名称不能为空")
     private String routeId;
 
     @ApiModelProperty("断言")

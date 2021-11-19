@@ -33,4 +33,18 @@ public interface SysRouteConfService {
      * @desc 新增路由
      **/
     String createRoute(GatewayDTO dto);
+
+    /**
+     * @Author: HSL
+     * @Date: 2021/11/19 11:24
+     * @Desc: 刷新路由
+     **/
+    String refreshGatewayRouteIntoRouteDefinitionWriter();
+
+    /**
+     * @Author: HSL
+     * @Date: 2021/11/19 13:48
+     * @Desc: 删除路由
+     **/
+    void deleteRoute(String routeId);
 }
