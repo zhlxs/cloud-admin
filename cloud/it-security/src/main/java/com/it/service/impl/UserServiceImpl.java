@@ -29,8 +29,8 @@ public class UserServiceImpl implements UserService {
     private DozerUtil dozerUtil;
     @Autowired
     private UserDao userDao;
-    @Autowired
-    private BCryptPasswordEncoder passwordEncoder;
+//    @Autowired
+//    private BCryptPasswordEncoder passwordEncoder;
 
     @Override
     public SysUser saveUser(UserDto userDto) {
@@ -44,7 +44,7 @@ public class UserServiceImpl implements UserService {
 
     @Override
     public SysUser getUser(String username) {
-        return null;
+        return userDao.getUser(username);
     }
 
     @Override
@@ -53,10 +53,10 @@ public class UserServiceImpl implements UserService {
         if (ObjectUtil.isNull(user)) {
             throw new BizException("用户不存在");
         }
-        if (!passwordEncoder.matches(oldPassword, user.getPassword())) {
+        /*if (!passwordEncoder.matches(oldPassword, user.getPassword())) {
             throw new BizException("原密码错误");
         }
-        userDao.changePassword(user.getId(), passwordEncoder.encode(newPassword));
+        userDao.changePassword(user.getId(), passwordEncoder.encode(newPassword));*/
         log.debug("修改{}的密码", userName);
     }
 

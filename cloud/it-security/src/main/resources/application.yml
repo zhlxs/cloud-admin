@@ -1,9 +1,11 @@
 spring:
   main:
     allow-bean-definition-overriding: true
+  application:
+    name: it-security
   datasource:
     driver-class-name: com.mysql.cj.jdbc.Driver
-    url: jdbc:mysql://192.168.1.102:3306/boot_security?useUnicode=true&characterEncoding=utf-8&allowMultiQueries=true&useSSL=falseserverTimezone=UTC
+    url: jdbc:mysql://192.168.1.102:3306/boot_security?useUnicode=true&characterEncoding=utf-8&allowMultiQueries=true&useSSL=false&serverTimezone=UTC
     username: root
     password: root
     druid:
@@ -23,6 +25,10 @@ spring:
       connectionProperties: druid.stat.mergeSql=true;druid.stat.slowSqlMillis=5000
       stat-view-servlet:
         allow: 127.0.0.1
+  cloud:
+    nacos:
+      discovery:
+        server-addr: localhost:8848
   jackson:
     date-format: yyyy-MM-dd HH:mm:ss
     time-zone: GMT+8
@@ -41,7 +47,7 @@ spring:
       password: admin
 
 server:
-  port: 8888
+  port: 9999
 mybatis-plus:
   type-aliases-package: com.it.entity
   mapper-locations: classpath:/mapper/*
@@ -52,3 +58,8 @@ jwt:
   secret: aaaaaaabbbbbbcccccdddddaaaaaaabbbbbbcccccdddddaaaaaaabbbbbbcccccddddd
   # 有效期，单位秒，默认2周
   expire-time-in-second: 1209600
+#token配置
+token:
+  expire:
+    seconds: 7200
+  jwtSecret: (XIAO:)_$^11244^%$_(WEI:)_@@++--(LAO:)_++++_.sds_(SHI:)

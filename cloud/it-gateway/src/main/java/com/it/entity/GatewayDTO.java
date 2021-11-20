@@ -36,7 +36,7 @@ public class GatewayDTO implements Serializable {
     private String uri;
 
     @ApiModelProperty("排序码")
-    private Integer order;
+    private Integer orderno;
 
     @ApiModelProperty("创建时间")
     private String createTime;

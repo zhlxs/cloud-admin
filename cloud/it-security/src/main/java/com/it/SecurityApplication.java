@@ -11,22 +11,19 @@ import org.springframework.web.client.RestTemplate;
 @MapperScan("com.it.dao")
 @ComponentScan("com.it")
 @SpringBootApplication
-public class SecurityApplication
-{
-	public static void main(String[] args)
-	{
-		SpringApplication.run(SecurityApplication.class);
-	}
+public class SecurityApplication {
+    public static void main(String[] args) {
+        SpringApplication.run(SecurityApplication.class);
+    }
 
-	@Bean
-	public RestTemplate restTemplate()
-	{
-		RestTemplate restTemplate = new RestTemplate();
-		HttpComponentsClientHttpRequestFactory factory = new HttpComponentsClientHttpRequestFactory();
-		factory.setConnectionRequestTimeout(30 * 1000);
-		factory.setConnectTimeout(30 * 3000);
-		factory.setReadTimeout(30 * 3000);
-		restTemplate.setRequestFactory(factory);
-		return restTemplate;
-	}
+    @Bean
+    public RestTemplate restTemplate() {
+        RestTemplate restTemplate = new RestTemplate();
+        HttpComponentsClientHttpRequestFactory factory = new HttpComponentsClientHttpRequestFactory();
+        factory.setConnectionRequestTimeout(30 * 1000);
+        factory.setConnectTimeout(30 * 3000);
+        factory.setReadTimeout(30 * 3000);
+        restTemplate.setRequestFactory(factory);
+        return restTemplate;
+    }
 }

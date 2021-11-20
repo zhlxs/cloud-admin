@@ -14,30 +14,29 @@ import java.util.List;
 import java.util.Map;
 
 @Mapper
-public interface UserDao extends BaseMapper<SysUserDO>
-{
+public interface UserDao extends BaseMapper<SysUserDO> {
 
-	@Options(useGeneratedKeys = true, keyProperty = "id")
-	@Insert("insert into sys_user(username, password, nickname, headImgUrl, phone, telephone, email, birthday, sex, status, createTime, updateTime) values(#{username}, #{password}, #{nickname}, #{headImgUrl}, #{phone}, #{telephone}, #{email}, #{birthday}, #{sex}, #{status}, now(), now())")
-	int save(SysUserDO user);
+    @Options(useGeneratedKeys = true, keyProperty = "id")
+    @Insert("insert into sys_user(username, password, nickname, headImgUrl, phone, telephone, email, birthday, sex, status, createTime, updateTime) values(#{username}, #{password}, #{nickname}, #{headImgUrl}, #{phone}, #{telephone}, #{email}, #{birthday}, #{sex}, #{status}, now(), now())")
+    int save(SysUserDO user);
 
-	@Select("select * from sys_user t where t.id = #{id}")
-	SysUserDO getById(Long id);
+    @Select("select * from sys_user t where t.id = #{id}")
+    SysUserDO getById(Long id);
 
-	@Select("select * from sys_user t where t.username = #{userName}")
-	SysUserDO getUser(String userName);
+    @Select("select * from sys_user t where t.username = #{userName}")
+    SysUserDO getUser(String userName);
 
-	@Update("update sys_user t set t.password = #{password} where t.id = #{id}")
-	int changePassword(@Param("id") Long id, @Param("password") String password);
+    @Update("update sys_user t set t.password = #{password} where t.id = #{id}")
+    int changePassword(@Param("id") Long id, @Param("password") String password);
 
-	Integer count(@Param("params") Map<String, Object> params);
+    Integer count(@Param("params") Map<String, Object> params);
 
-	List<SysUserDO> list(@Param("params") Map<String, Object> params, @Param("offset") Integer offset, @Param("limit") Integer limit);
+    List<SysUserDO> list(@Param("params") Map<String, Object> params, @Param("offset") Integer offset, @Param("limit") Integer limit);
 
-	@Delete("delete from sys_role_user where userId = #{userId}")
-	int deleteUserRole(Long userId);
+    @Delete("delete from sys_role_user where userId = #{userId}")
+    int deleteUserRole(Long userId);
 
-	int saveUserRoles(@Param("userId") Long userId, @Param("roleIds") List<Long> roleIds);
+    int saveUserRoles(@Param("userId") Long userId, @Param("roleIds") List<Long> roleIds);
 
-	int update(SysUserDO user);
+    int update(SysUserDO user);
 }

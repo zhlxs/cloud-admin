@@ -22,11 +22,11 @@ import java.nio.charset.StandardCharsets;
 public class JwtAccessDeniedHandler implements AccessDeniedHandler {
 
     @Override
-    public void handle(HttpServletRequest request, HttpServletResponse response, AccessDeniedException e) throws IOException, ServletException {
+    public void handle(HttpServletRequest request, HttpServletResponse response, AccessDeniedException e) throws IOException {
         response.setContentType("application/json;charset=UTF-8");
         response.setStatus(HttpServletResponse.SC_FORBIDDEN);
         ServletOutputStream outputStream = response.getOutputStream();
-        ApiResult<String> result = ApiResult.fail(e.getMessage());
+        ApiResult<Integer> result = ApiResult.success(HttpServletResponse.SC_FORBIDDEN, e.getMessage());
         outputStream.write(JSONUtil.toJsonStr(result).getBytes(StandardCharsets.UTF_8));
         outputStream.flush();
         outputStream.close();

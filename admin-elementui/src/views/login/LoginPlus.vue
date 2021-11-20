@@ -74,10 +74,10 @@ export default {
     submitForm (formName) {
       this.$refs[formName].validate((valid) => {
         if (valid) {
-          this.$message.success('登录成功!!!')
-          this.$router.push({ path: '/' })
+          // this.$message.success('登录成功!!!')
+          // this.$router.push({ path: '/' })
           // 实现登录逻辑
-          this.$http.post('/api/login/login', this.$qs.stringify({
+          this.$http.post('/api/it-security/login', this.$qs.stringify({
             login_account: this.ruleForm.user,
             password: this.ruleForm.password
           })).then(function (res) {

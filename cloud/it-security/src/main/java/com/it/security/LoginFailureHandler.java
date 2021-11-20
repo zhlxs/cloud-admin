@@ -2,11 +2,13 @@ package com.it.security;
 
 import cn.hutool.json.JSONUtil;
 import com.it.entity.ApiResult;
+import org.springframework.security.authentication.BadCredentialsException;
+import org.springframework.security.authentication.DisabledException;
 import org.springframework.security.core.AuthenticationException;
+import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.security.web.authentication.AuthenticationFailureHandler;
 import org.springframework.stereotype.Component;
 
-import javax.servlet.ServletException;
 import javax.servlet.ServletOutputStream;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
@@ -22,10 +24,18 @@ import java.nio.charset.StandardCharsets;
 public class LoginFailureHandler implements AuthenticationFailureHandler {
 
     @Override
-    public void onAuthenticationFailure(HttpServletRequest request, HttpServletResponse response, AuthenticationException e) throws IOException, ServletException {
-        response.setContentType("application/json;charset=UTF-8");
+    public void onAuthenticationFailure(HttpServletRequest request, HttpServletResponse response, AuthenticationException ex) throws IOException {
+        ApiResult<Integer> result;
+        response.setContentType("application/json;charset=utf-8");
+        response.setStatus(HttpServletResponse.SC_UNAUTHORIZED);
+        if (ex instanceof UsernameNotFoundException || ex instanceof BadCredentialsException) {
+            result = ApiResult.success(HttpServletResponse.SC_UNAUTHORIZED, "用户名或密码错误");
+        } else if (ex instanceof DisabledException) {
+            result = ApiResult.success(HttpServletResponse.SC_UNAUTHORIZED, "账户被禁用");
+        } else {
+            result = ApiResult.success(HttpServletResponse.SC_UNAUTHORIZED, "登录失败");
+        }
         ServletOutputStream outputStream = response.getOutputStream();
-        ApiResult<String> result = ApiResult.fail(e.getMessage());
         outputStream.write(JSONUtil.toJsonStr(result).getBytes(StandardCharsets.UTF_8));
         outputStream.flush();
         outputStream.close();
