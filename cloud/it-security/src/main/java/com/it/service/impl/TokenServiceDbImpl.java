@@ -7,9 +7,13 @@ import com.it.dto.Token;
 import com.it.entity.TokenModel;
 import com.it.service.SysLogService;
 import com.it.service.TokenService;
+import io.jsonwebtoken.Claims;
 import io.jsonwebtoken.ExpiredJwtException;
 import io.jsonwebtoken.Jwts;
+import io.jsonwebtoken.MalformedJwtException;
 import io.jsonwebtoken.SignatureAlgorithm;
+import io.jsonwebtoken.UnsupportedJwtException;
+import io.jsonwebtoken.security.Keys;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.collections.MapUtils;
 import org.apache.commons.lang3.StringUtils;
@@ -17,6 +21,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 
+import javax.crypto.SecretKey;
 import javax.crypto.spec.SecretKeySpec;
 import javax.xml.bind.DatatypeConverter;
 import java.security.Key;
@@ -54,7 +59,6 @@ public class TokenServiceDbImpl implements TokenService {
 
     @Override
     public Token saveToken(LoginUser loginUser) {
-        // todo
         loginUser.setToken(UUID.randomUUID().toString());
         loginUser.setLoginTime(System.currentTimeMillis());
         loginUser.setExpireTime(loginUser.getLoginTime() + expireSeconds * 1000);
@@ -79,8 +83,9 @@ public class TokenServiceDbImpl implements TokenService {
     private String createJWTToken(LoginUser loginUser) {
         Map<String, Object> claims = new HashMap<>();
         claims.put(LOGIN_USER_KEY, loginUser.getToken());// 放入一个随机字符串，通过该串可找到登陆用户
-        return Jwts.builder().setClaims(claims).signWith(SignatureAlgorithm.HS256, getKeyInstance())
-                .compact();
+        return this.generateToken(claims);
+        /*return Jwts.builder().setClaims(claims).signWith(SignatureAlgorithm.HS256, getKeyInstance())
+                .compact();*/
     }
 
     @Override
@@ -143,19 +148,71 @@ public class TokenServiceDbImpl implements TokenService {
         return KEY;
     }
 
+    /**
+     * @author HSL
+     * @date 2021-11-21
+     * @desc 从token中获取其唯一标识
+     **/
     private String getUUIDFromJWT(String jwt) {
         if ("null".equals(jwt) || StringUtils.isBlank(jwt)) {
             return null;
         }
-        Map<String, Object> jwtClaims = null;
+        Map<String, Object> jwtClaims;
         try {
-            jwtClaims = Jwts.parser().setSigningKey(getKeyInstance()).parseClaimsJws(jwt).getBody();
+            // jwtClaims = Jwts.parser().setSigningKey(getKeyInstance()).parseClaimsJws(jwt).getBody();
+            jwtClaims = this.getClaimsFromToken(jwt);
             return MapUtils.getString(jwtClaims, LOGIN_USER_KEY);
         } catch (ExpiredJwtException e) {
             log.error("{}已过期", jwt);
         } catch (Exception e) {
-            log.error("{}", e);
+            log.error("{%s}", e);
         }
         return null;
+    }
+
+    /**
+     * @author HSL
+     * @date 2021-11-21
+     * @desc 生成token
+     **/
+    public String generateToken(Map<String, Object> claims) {
+        Date createdTime = new Date();
+        Date expirationTime = getExpirationTime();
+        byte[] keyBytes = this.jwtSecret.getBytes();
+        SecretKey key = Keys.hmacShaKeyFor(keyBytes);
+        return Jwts.builder()
+                .setClaims(claims)
+                .setIssuedAt(createdTime)
+                .setExpiration(expirationTime)
+                // 你也可以改用你喜欢的算法
+                // 支持的算法详见：https://github.com/jwtk/jjwt#features
+                .signWith(key, SignatureAlgorithm.HS256)
+                .compact();
+    }
+
+    /**
+     * @author HSL
+     * @date 2021-11-21
+     * @desc token过期时间
+     **/
+    public Date getExpirationTime() {
+        return new Date(System.currentTimeMillis() + this.expireSeconds * 1000);
+    }
+
+    /**
+     * @author HSL
+     * @date 2021-11-21
+     * @desc 从token中获取claim
+     **/
+    public Claims getClaimsFromToken(String token) {
+        try {
+            return Jwts.parser()
+                    .setSigningKey(this.jwtSecret.getBytes())
+                    .parseClaimsJws(token)
+                    .getBody();
+        } catch (ExpiredJwtException | UnsupportedJwtException | MalformedJwtException | IllegalArgumentException e) {
+            log.error("token解析错误", e);
+            throw new IllegalArgumentException("Token invalided.");
+        }
     }
 }

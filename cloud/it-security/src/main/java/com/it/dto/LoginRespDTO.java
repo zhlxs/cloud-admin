@@ -22,10 +22,10 @@ public class LoginRespDTO implements Serializable {
     /**
      * token信息
      */
-    private JwtTokenRespDTO jwtToken;
+    private Token jwtToken;
 
     /**
      * 用户信息
      */
-    private UserRespDTO user;
+    private LoginUser user;
 }

@@ -21,7 +21,7 @@ export default new Router({
       component: () => import('@/views/login/LoginPlus')
     },
     {
-      path: '/',
+      path: '/main',
       name: 'Main',
       component: Main,
       children: [

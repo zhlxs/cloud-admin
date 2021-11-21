@@ -31,10 +31,11 @@ Vue.config.productionTip = false
   */
 router.beforeEach((to, from, next) => {
   if (to.path === '/login') {
-    sessionStorage.removeItem('user')
+    sessionStorage.removeItem('token')
   }
-  let user = JSON.parse(sessionStorage.getItem('user'))
-  if (!user && to.path !== '/login') {
+  // let token = JSON.parse(sessionStorage.getItem('token'))
+  let token = sessionStorage.getItem('token')
+  if (!token && to.path !== '/login') {
     next({
       path: '/login'
     })

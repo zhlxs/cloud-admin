@@ -13,15 +13,14 @@ import com.it.dto.Token;
  * @author 小威老师
  * 2017年10月14日
  */
-public interface TokenService
-{
+public interface TokenService {
 
-	Token saveToken(LoginUser loginUser);
+    Token saveToken(LoginUser loginUser);
 
-	void refresh(LoginUser loginUser);
+    void refresh(LoginUser loginUser);
 
-	LoginUser getLoginUser(String token);
+    LoginUser getLoginUser(String token);
 
-	boolean deleteToken(String token);
+    boolean deleteToken(String token);
 
 }

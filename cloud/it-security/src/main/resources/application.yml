@@ -41,10 +41,10 @@ spring:
     servlet:
       load-on-startup: 1
 
-  security:
-    user:
-      name: admin
-      password: admin
+#  security:
+#    user:
+#      name: admin
+#      password: admin
 
 server:
   port: 9999
@@ -55,9 +55,9 @@ mybatis-plus:
     map-underscore-to-camel-case: true
 
 jwt:
-  secret: aaaaaaabbbbbbcccccdddddaaaaaaabbbbbbcccccdddddaaaaaaabbbbbbcccccddddd
+  secret: (XIAO:)_$^11244^%$_(WEI:)_@@++--(LAO:)_++++_.sds_(SHI:)
   # 有效期，单位秒，默认2周
-  expire-time-in-second: 1209600
+  expire-time-in-second: 7200
 #token配置
 token:
   expire:

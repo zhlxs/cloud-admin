@@ -3,6 +3,7 @@ const user = {
   state: {
     token: '',
     userName: '',
+    nickName: '',
     deptId: '',
     roles: [],
     paths: [],
@@ -14,10 +15,14 @@ const mutations = {
     state.isLogin = val
   },
   saveLoginInfo (state, val) {
-    state.token = val.token.token
-    state.userName = val.user.userName
-    state.roles = val.user.roles
-    Cookies.set('Login-Token', val.token.token)
+    if (val.user) {
+      state.userName = val.user.username ? val.user.username : ''
+      state.nickName = val.user.nickname ? val.user.nickname : ''
+      // state.roles = val.user.roles
+    }
+    if (val.jwtToken && val.jwtToken.token) {
+      Cookies.set('User-Token', val.jwtToken.token)
+    }
   }
 }
 
