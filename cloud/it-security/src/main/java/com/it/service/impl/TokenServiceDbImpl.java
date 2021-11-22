@@ -71,7 +71,7 @@ public class TokenServiceDbImpl implements TokenService {
         tokenDao.save(model);
         // 登录日志
         logService.save(loginUser.getId(), "登录", true, null);
-        String jwtToken = createJWTToken(loginUser);
+        String jwtToken = createJWTToken(loginUser, loginUser.getExpireTime());
         return new Token(jwtToken, loginUser.getLoginTime());
     }
 
@@ -80,8 +80,10 @@ public class TokenServiceDbImpl implements TokenService {
      * @date 2021-11-15
      * @desc 生成jwt
      **/
-    private String createJWTToken(LoginUser loginUser) {
+    private String createJWTToken(LoginUser loginUser, Long expireTime) {
         Map<String, Object> claims = new HashMap<>();
+        claims.put("userId", loginUser.getId());
+        claims.put("expireTime", expireTime);
         claims.put(LOGIN_USER_KEY, loginUser.getToken());// 放入一个随机字符串，通过该串可找到登陆用户
         return this.generateToken(claims);
         /*return Jwts.builder().setClaims(claims).signWith(SignatureAlgorithm.HS256, getKeyInstance())

@@ -48,6 +48,8 @@ spring:
 
 server:
   port: 9999
+  servlet:
+    context-path: /it-security
 mybatis-plus:
   type-aliases-package: com.it.entity
   mapper-locations: classpath:/mapper/*
