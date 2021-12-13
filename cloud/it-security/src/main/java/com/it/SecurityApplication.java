@@ -3,6 +3,7 @@ package com.it;
 import org.mybatis.spring.annotation.MapperScan;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
+import org.springframework.cloud.client.discovery.EnableDiscoveryClient;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.ComponentScan;
 import org.springframework.http.client.HttpComponentsClientHttpRequestFactory;
@@ -11,6 +12,7 @@ import org.springframework.web.client.RestTemplate;
 @MapperScan("com.it.dao")
 @ComponentScan("com.it")
 @SpringBootApplication
+@EnableDiscoveryClient
 public class SecurityApplication {
     public static void main(String[] args) {
         SpringApplication.run(SecurityApplication.class);
